@@ -15,6 +15,87 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/admin/car/status": {
+            "post": {
+                "tags": [
+                    "car"
+                ],
+                "summary": "Обновить статус машины.Нужно отправить id, status. Status может быть 0(processing), -1(denied), 1(accepted)",
+                "parameters": [
+                    {
+                        "description": "тело запроса",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Car"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Car"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/user/driver-status": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Апдейт статуса водительских прав пользователя.Нужно отправить id, driver_license_status(true,false).",
+                "parameters": [
+                    {
+                        "description": "тело запроса",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/user/status": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "summary": "Апдейт статуса пользователя. Нужно отправить id, status.  Status может быть 0(processing), -1(denied), 1(accepted)",
+                "parameters": [
+                    {
+                        "description": "тело запроса",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/booking": {
             "put": {
                 "tags": [
@@ -272,6 +353,30 @@ const docTemplate = `{
                 "responses": {}
             }
         },
+        "/api/v1/cars/rating": {
+            "post": {
+                "summary": "Обновить рейтинг машины.Нужно отправить id, rating, rating_tags(можно придумать самому как удобно. пример: nice,clean,bad. Это все в одном поле через запятую)",
+                "parameters": [
+                    {
+                        "description": "тело запроса",
+                        "name": "req",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Car"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Car"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/cars/search": {
             "post": {
                 "tags": [
@@ -435,6 +540,9 @@ const docTemplate = `{
         "models.Booking": {
             "type": "object",
             "properties": {
+                "car": {
+                    "$ref": "#/definitions/models.Car"
+                },
                 "car_id": {
                     "type": "integer"
                 },
@@ -534,8 +642,20 @@ const docTemplate = `{
                 "price_per_day": {
                     "type": "number"
                 },
+                "rating": {
+                    "type": "number"
+                },
+                "rating_count": {
+                    "type": "integer"
+                },
+                "rating_tags": {
+                    "type": "string"
+                },
                 "seats": {
                     "type": "integer"
+                },
+                "status": {
+                    "type": "string"
                 },
                 "title": {
                     "type": "string"
@@ -575,6 +695,9 @@ const docTemplate = `{
                 "created_at": {
                     "type": "string"
                 },
+                "driver_license_status": {
+                    "type": "string"
+                },
                 "email": {
                     "type": "string"
                 },
@@ -584,7 +707,19 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
+                "owner_rating": {
+                    "type": "number"
+                },
                 "phone_number": {
+                    "type": "string"
+                },
+                "renter_rating": {
+                    "type": "number"
+                },
+                "renter_rating_count": {
+                    "type": "integer"
+                },
+                "status": {
                     "type": "string"
                 }
             }

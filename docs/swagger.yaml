@@ -1,6 +1,8 @@
 definitions:
   models.Booking:
     properties:
+      car:
+        $ref: '#/definitions/models.Car'
       car_id:
         type: integer
       created_at:
@@ -67,8 +69,16 @@ definitions:
         type: integer
       price_per_day:
         type: number
+      rating:
+        type: number
+      rating_count:
+        type: integer
+      rating_tags:
+        type: string
       seats:
         type: integer
+      status:
+        type: string
       title:
         type: string
       transmission:
@@ -94,18 +104,81 @@ definitions:
         type: array
       created_at:
         type: string
+      driver_license_status:
+        type: string
       email:
         type: string
       full_name:
         type: string
       id:
         type: integer
+      owner_rating:
+        type: number
       phone_number:
+        type: string
+      renter_rating:
+        type: number
+      renter_rating_count:
+        type: integer
+      status:
         type: string
     type: object
 info:
   contact: {}
 paths:
+  /api/v1/admin/car/status:
+    post:
+      parameters:
+      - description: тело запроса
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.Car'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Car'
+      summary: Обновить статус машины.Нужно отправить id, status. Status может быть
+        0(processing), -1(denied), 1(accepted)
+      tags:
+      - car
+  /api/v1/admin/user/driver-status:
+    post:
+      parameters:
+      - description: тело запроса
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Апдейт статуса водительских прав пользователя.Нужно отправить id, driver_license_status(true,false).
+      tags:
+      - user
+  /api/v1/admin/user/status:
+    post:
+      parameters:
+      - description: тело запроса
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+      summary: Апдейт статуса пользователя. Нужно отправить id, status.  Status может
+        быть 0(processing), -1(denied), 1(accepted)
+      tags:
+      - user
   /api/v1/booking:
     post:
       parameters:
@@ -273,6 +346,23 @@ paths:
       summary: Получить детали машины
       tags:
       - car
+  /api/v1/cars/rating:
+    post:
+      parameters:
+      - description: тело запроса
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.Car'
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Car'
+      summary: 'Обновить рейтинг машины.Нужно отправить id, rating, rating_tags(можно
+        придумать самому как удобно. пример: nice,clean,bad. Это все в одном поле
+        через запятую)'
   /api/v1/cars/search:
     post:
       parameters:
