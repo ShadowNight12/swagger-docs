@@ -36,7 +36,7 @@
                 "tags": [
                     "user"
                 ],
-                "summary": "Апдейт статуса водительских прав пользователя.Нужно отправить id, driver_license_status(true,false).",
+                "summary": "Апдейт статуса водительских прав пользователя.Нужно отправить id, driver_license_status. driver_license_status может быть 0(processing), -1(denied), 1(accepted).",
                 "parameters": [
                     {
                         "description": "тело запроса",
